@@ -38,8 +38,8 @@ impl Pallet {
 #[test]
 fn test_balance() {
     let mut pallet = Pallet::new();
-    const ALICE: &'static str = "Alice";
-    const ANN: &'static str = "Ann";
+    const ALICE: &str = "Alice";
+    const ANN: &str = "Ann";
     assert_eq!(pallet.balance(ALICE), 0);
     pallet.set_balance(&ANN.to_string(), 100);
     assert_eq!(pallet.balance(ANN), 100);
@@ -49,11 +49,11 @@ fn test_balance() {
 #[test]
 fn transfer_balance() {
     let mut pallet = Pallet::new();
-    const ALICE: String = "Alice".to_string();
-    const BOB: String = "Bob".to_string();
-    pallet.set_balance(&ALICE, 100);
-    pallet.set_balance(&BOB, 100);
-    pallet.transfer(ALICE, BOB, 50).unwrap();
+    const ALICE: &str  = "Alice";
+    const BOB: &str  = "Bob";
+    pallet.set_balance(&ALICE.to_string(), 100);
+    pallet.set_balance(&BOB.to_string(), 100);
+    pallet.transfer(ALICE.to_string(), BOB.to_string(), 50).unwrap();
     assert_eq!(pallet.balance("Alice"), 50);
     assert_eq!(pallet.balance("Bob"), 150);
 }
@@ -61,10 +61,10 @@ fn transfer_balance() {
 #[test]
 fn transfer_balance_insufficient() {
     let mut pallet = Pallet::new();
-    const ALICE: String = "Alice".to_string();
-    const BOB: String = "Bob".to_string();
-    pallet.set_balance(&ALICE, 100);
-    pallet.set_balance(&BOB, 100);
-    assert_eq!(pallet.transfer(ALICE, BOB, 150),
+    const ALICE: &str = "Alice";
+    const BOB: &str = "Bob";
+    pallet.set_balance(&ALICE.to_string(), 100);
+    pallet.set_balance(&BOB.to_string(), 100);
+    assert_eq!(pallet.transfer(ALICE.to_string(), BOB.to_string(), 150),
                Err("Insufficient balance"));
 }
