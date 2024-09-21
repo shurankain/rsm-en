@@ -3,6 +3,7 @@ use std::collections::BTreeMap;
 // This is System Pallet
 // Handles the low level state transition functions of the blockchain
 // Contains block number (u32) and a map from the account to their nonce
+#[derive(Debug)]
 pub struct Pallet {
     // block number
     block_number: u32,

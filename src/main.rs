@@ -1,6 +1,7 @@
 mod balances;
 mod system;
 
+#[derive(Debug)]
 pub struct Runtime {
     balances: balances::Pallet,
     system: system::Pallet,
@@ -36,4 +37,5 @@ fn main() {
         .transfer(alice.clone(), charlie.clone(), 20)
         .map_err(|e| print!("Error: {:?}", e));
 
+    println!("{:#?}", runtime);
 }

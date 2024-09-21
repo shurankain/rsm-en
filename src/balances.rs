@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+#[derive(Debug)]
 pub struct Pallet {
     // the ket is the wallet and the value is the balance
     balances: BTreeMap<String, u128>,
