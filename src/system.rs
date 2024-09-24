@@ -1,14 +1,12 @@
 use std::collections::BTreeMap;
-
-type AccountId = String;
-type BlockNumber = u32;
-type Nonce = u32;
+use std::ops::AddAssign;
+use num::{CheckedAdd, CheckedSub, One, Unsigned, Zero};
 
 // This is System Pallet
 // Handles the low level state transition functions of the blockchain
 // Contains block number (u32) and a map from the account to their nonce
 #[derive(Debug)]
-pub struct Pallet {
+pub struct Pallet<AccountId, BlockNumber, Nonce> {
     // block number
     block_number: BlockNumber,
     // map from account to their nonce (nonce is a number that is used only once, that counts the transactions of an account)
@@ -16,10 +14,15 @@ pub struct Pallet {
     nonce: BTreeMap<AccountId, Nonce>,
 }
 
-impl Pallet {
+impl <AccountId, BlockNumber, Nonce> Pallet <AccountId, BlockNumber, Nonce>
+where
+    AccountId: Ord + Clone,
+    BlockNumber: CheckedAdd + CheckedSub + Zero +One + Copy + Unsigned + AddAssign,
+    Nonce: Zero + One + Ord + Clone + Copy,
+{
     pub fn new() -> Self {
         Self {
-            block_number: 0,
+            block_number: BlockNumber::zero(),
             nonce: BTreeMap::new(),
         }
     }
@@ -31,37 +34,38 @@ impl Pallet {
 
     pub fn inc_block_number(&mut self) {
         // fails on overflow as expected behavior, because block number should never overflow
-        self.block_number = self.block_number.checked_add(1).unwrap()
+        self.block_number += BlockNumber::one()
     }
 
     pub fn inc_nonce(&mut self, who: &AccountId) {
-        let nonce = self.nonce.get(who).unwrap_or(&0);
-        self.nonce.insert(who.clone(), nonce + 1);
+        let nonce = *self.nonce.get(who).unwrap_or(&Nonce::zero());
+        self.nonce.insert(who.clone(), nonce + Nonce::one());
     }
 
     pub fn get_nonce(&self, who: &AccountId) -> Nonce {
-        *self.nonce.get(who).unwrap_or(&0)
+        *self.nonce.get(who).unwrap_or(&Nonce::zero())
     }
 }
 
 #[cfg(test)]
 mod test {
+
     #[test]
     fn init_system() {
-        let _pallet = super::Pallet::new();
+        let _pallet:super::Pallet<String, u32, u32> = super::Pallet::new();
         assert_eq!(_pallet.block_number(), 0);
     }
 
     #[test]
     fn inc_block_number() {
-        let mut pallet = super::Pallet::new();
+        let mut pallet:super::Pallet<String, u32, u32> = super::Pallet::new();
         pallet.inc_block_number();
         assert_eq!(pallet.block_number(), 1);
     }
 
     #[test]
     fn inc_nonce() {
-        let mut pallet = super::Pallet::new();
+        let mut pallet:super::Pallet<String, u32, u32> = super::Pallet::new();
         let alice = "Alice".to_string();
         pallet.inc_nonce(&alice);
         assert_eq!(pallet.get_nonce(&alice), 1);
