@@ -29,7 +29,6 @@ where AccountId : Ord + Clone,
                     to: AccountId, amount: Balance) -> Result<(), &'static str> {
         let caller_balance = self.balance(&from);
         let to_balance = self.balance(&to);
-        println!("caller_balance: {:?}, to_balance: {:?}", caller_balance, to_balance);
         let new_caller_balance = caller_balance.checked_sub(&amount)
             .ok_or("Insufficient balance")?;
         let new_to_balance = to_balance.checked_add(&amount)
