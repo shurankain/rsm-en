@@ -10,7 +10,8 @@ pub struct Pallet<AccountId, Balance> {
 }
 
 impl<AccountId, Balance> Pallet<AccountId, Balance>
-where AccountId : Ord + Clone, Balance : CheckedAdd + CheckedSub + Zero + Copy + Unsigned + Debug {
+where AccountId : Ord + Clone,
+      Balance : CheckedAdd + CheckedSub + Zero + Copy + Unsigned {
     pub fn new() -> Self {
         Self {
             balances: BTreeMap::new()
