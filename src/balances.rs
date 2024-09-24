@@ -42,14 +42,9 @@ where AccountId : Ord + Clone,
 
 #[cfg(test)]
 mod test {
-
-    mod types {
-        pub type AccountId = String;
-        pub type Balance = u128;
-    }
     #[test]
     fn test_balance() {
-        let mut pallet = super::Pallet::<types::AccountId, types::Balance>::new();
+        let mut pallet:super::Pallet<String, u128> = super::Pallet::new();
         const ALICE: &str = "Alice";
         const ANN: &str = "Ann";
         assert_eq!(pallet.balance(&ALICE.to_string()), 0);
@@ -60,7 +55,7 @@ mod test {
 
     #[test]
     fn transfer_balance() {
-        let mut pallet = super::Pallet::<types::AccountId, types::Balance>::new();
+        let mut pallet:super::Pallet<String, u128> = super::Pallet::new();
         static  ALICE: &str  = "Alice";
         static  BOB: &str  = "Bob";
         pallet.set_balance(&ALICE.to_string(), 100);
@@ -73,7 +68,7 @@ mod test {
     #[test]
     fn transfer_balance_insufficient() {
         //creat new mutable super::Pallet<AccountId, Balance>
-        let mut pallet = super::Pallet::<types::AccountId, types::Balance>::new();
+        let mut pallet:super::Pallet<String, u128> = super::Pallet::new();
         const ALICE: &str = "Alice";
         const BOB: &str = "Bob";
         pallet.set_balance(&ALICE.to_string(), 100);
