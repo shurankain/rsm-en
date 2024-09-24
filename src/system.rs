@@ -14,10 +14,10 @@ pub struct Pallet<AccountId, BlockNumber, Nonce> {
     nonce: BTreeMap<AccountId, Nonce>,
 }
 
-impl <AccountId, BlockNumber, Nonce> Pallet <AccountId, BlockNumber, Nonce>
+impl<AccountId, BlockNumber, Nonce> Pallet<AccountId, BlockNumber, Nonce>
 where
     AccountId: Ord + Clone,
-    BlockNumber: CheckedAdd + CheckedSub + Zero +One + Copy + Unsigned + AddAssign,
+    BlockNumber: CheckedAdd + CheckedSub + Zero + One + Copy + Unsigned + AddAssign,
     Nonce: Zero + One + Ord + Clone + Copy,
 {
     pub fn new() -> Self {
@@ -49,23 +49,22 @@ where
 
 #[cfg(test)]
 mod test {
-
     #[test]
     fn init_system() {
-        let _pallet:super::Pallet<String, u32, u32> = super::Pallet::new();
+        let _pallet: super::Pallet<String, u32, u32> = super::Pallet::new();
         assert_eq!(_pallet.block_number(), 0);
     }
 
     #[test]
     fn inc_block_number() {
-        let mut pallet:super::Pallet<String, u32, u32> = super::Pallet::new();
+        let mut pallet: super::Pallet<String, u32, u32> = super::Pallet::new();
         pallet.inc_block_number();
         assert_eq!(pallet.block_number(), 1);
     }
 
     #[test]
     fn inc_nonce() {
-        let mut pallet:super::Pallet<String, u32, u32> = super::Pallet::new();
+        let mut pallet: super::Pallet<String, u32, u32> = super::Pallet::new();
         let alice = "Alice".to_string();
         pallet.inc_nonce(&alice);
         assert_eq!(pallet.get_nonce(&alice), 1);

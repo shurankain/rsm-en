@@ -9,8 +9,10 @@ pub struct Pallet<AccountId, Balance> {
 }
 
 impl<AccountId, Balance> Pallet<AccountId, Balance>
-where AccountId : Ord + Clone,
-      Balance : CheckedAdd + CheckedSub + Zero + Copy + Unsigned {
+where
+    AccountId: Ord + Clone,
+    Balance: CheckedAdd + CheckedSub + Zero + Copy + Unsigned,
+{
     pub fn new() -> Self {
         Self {
             balances: BTreeMap::new()
@@ -44,7 +46,7 @@ where AccountId : Ord + Clone,
 mod test {
     #[test]
     fn test_balance() {
-        let mut pallet:super::Pallet<String, u128> = super::Pallet::new();
+        let mut pallet: super::Pallet<String, u128> = super::Pallet::new();
         const ALICE: &str = "Alice";
         const ANN: &str = "Ann";
         assert_eq!(pallet.balance(&ALICE.to_string()), 0);
@@ -55,9 +57,9 @@ mod test {
 
     #[test]
     fn transfer_balance() {
-        let mut pallet:super::Pallet<String, u128> = super::Pallet::new();
-        static  ALICE: &str  = "Alice";
-        static  BOB: &str  = "Bob";
+        let mut pallet: super::Pallet<String, u128> = super::Pallet::new();
+        static ALICE: &str = "Alice";
+        static BOB: &str = "Bob";
         pallet.set_balance(&ALICE.to_string(), 100);
         pallet.set_balance(&BOB.to_string(), 100);
         pallet.transfer(ALICE.to_string(), BOB.to_string(), 50).unwrap();
@@ -68,7 +70,7 @@ mod test {
     #[test]
     fn transfer_balance_insufficient() {
         //creat new mutable super::Pallet<AccountId, Balance>
-        let mut pallet:super::Pallet<String, u128> = super::Pallet::new();
+        let mut pallet: super::Pallet<String, u128> = super::Pallet::new();
         const ALICE: &str = "Alice";
         const BOB: &str = "Bob";
         pallet.set_balance(&ALICE.to_string(), 100);
@@ -76,5 +78,4 @@ mod test {
         assert_eq!(pallet.transfer(ALICE.to_string(), BOB.to_string(), 150),
                    Err("Insufficient balance"));
     }
-
 }
