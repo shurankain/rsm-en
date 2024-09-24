@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 use std::fmt::Debug;
-use num::traits::{CheckedAdd, CheckedSub, Zero};
-use num::Unsigned;
+use num::{CheckedAdd, CheckedSub, Zero, Unsigned};
 
 #[derive(Debug)]
 pub struct Pallet<AccountId, Balance> {
