@@ -1,6 +1,5 @@
 use num::{One, Zero};
-use std::collections::BTreeMap;
-use std::ops::AddAssign;
+use std::{collections::BTreeMap, ops::AddAssign};
 
 pub trait Config {
     type AccountId: Ord + Clone;
