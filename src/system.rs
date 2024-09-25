@@ -1,4 +1,4 @@
-use num::{CheckedAdd, CheckedSub, One, Unsigned, Zero};
+use num::{One, Zero};
 use std::collections::BTreeMap;
 use std::ops::AddAssign;
 
@@ -17,8 +17,8 @@ pub struct Pallet<AccountId, BlockNumber, Nonce> {
 impl<AccountId, BlockNumber, Nonce> Pallet<AccountId, BlockNumber, Nonce>
 where
     AccountId: Ord + Clone,
-    BlockNumber: CheckedAdd + CheckedSub + Zero + One + Copy + Unsigned + AddAssign,
-    Nonce: Zero + One + Ord + Clone + Copy,
+    BlockNumber: Zero + One + Copy + AddAssign,
+    Nonce: Zero + One + Ord + Copy,
 {
     pub fn new() -> Self {
         Self {
