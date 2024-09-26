@@ -1,3 +1,5 @@
+use crate::support::Dispatch;
+
 mod balances;
 mod system;
 mod support;
@@ -13,9 +15,7 @@ mod types {
     pub type Block = support::Block<Header, Extrinsic>;
 }
 
-enum RuntimeCall {
-
-}
+pub enum RuntimeCall {}
 
 impl system::Config for Runtime {
     type AccountId = types::AccountId;
@@ -39,6 +39,32 @@ impl Runtime {
             balances: balances::Pallet::new(),
             system: system::Pallet::new(),
         }
+    }
+
+    fn execute_block(&mut self, block: types::Block) -> support::DispatchResult {
+        self.system.inc_block_number();
+
+        if (self.system.block_number() != block.header.block_number) {
+            return Err("Block number mismatch");
+        }
+
+        for (i, support::Extrinsic { caller, call }) in block.extrinsics.into_iter().enumerate() {
+            self.system.inc_nonce(&caller);
+            let _ = self.dispatch(caller, call).map_err(|e| {
+                eprintln!("Extrensic Error\n\tBlock Number: {}\n\t Extrensic Num: {}\n\tError: {}",
+                          block.header.block_number, i, e)
+            });
+        }
+        Ok(())
+    }
+}
+
+impl support::Dispatch for Runtime {
+    type Caller = <Runtime as system::Config>::AccountId;
+    type Call = RuntimeCall;
+
+    fn dispatch(&mut self, caller: Self::Caller, runtime_call: Self::Call) -> support::DispatchResult {
+        unimplemented!();
     }
 }
 
