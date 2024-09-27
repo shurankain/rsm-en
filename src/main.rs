@@ -44,7 +44,7 @@ impl Runtime {
     fn execute_block(&mut self, block: types::Block) -> support::DispatchResult {
         self.system.inc_block_number();
 
-        if (self.system.block_number() != block.header.block_number) {
+        if self.system.block_number() != block.header.block_number {
             return Err("Block number mismatch");
         }
 
