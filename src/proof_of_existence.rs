@@ -42,6 +42,27 @@ impl<T: Config> Pallet<T> {
     }
 }
 
+pub enum Call<T: Config> {
+    CreateClaim { content: T::Content },
+    RevokeClaim { content: T::Content },
+}
+
+impl<T: Config> crate::support::Dispatch for Pallet<T> {
+    type Caller = T::AccountId;
+    type Call = Call<T>;
+
+    fn dispatch(&mut self, caller: Self::Caller, call: Self::Call) -> DispatchResult {
+        match call {
+            Call::CreateClaim { content } => {
+                self.create_claim(caller, content)
+            }
+            Call::RevokeClaim { content } => {
+                self.revoke_claim(caller, content)
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod test {
     struct TestConfig;
