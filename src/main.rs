@@ -119,5 +119,25 @@ fn main() {
 
     runtime.execute_block(block_1).expect("wrong block execution");
 
+    let block_2 = types::Block {
+        header: support::Header { block_number: 2 },
+        extrinsics: vec![
+            support::Extrinsic {
+                caller: alice.clone(),
+                call: RuntimeCall::ProofOfExistence(proof_of_existence::Call::CreateClaim {
+                    content: "my document"
+                })
+            },
+            support::Extrinsic {
+                caller: bob.clone(),
+                call: RuntimeCall::ProofOfExistence(proof_of_existence::Call::CreateClaim {
+                    content: "bob's document"
+                })
+            }
+        ],
+    };
+
+    runtime.execute_block(block_2).expect("wrong block execution");
+
     println!("{:#?}", runtime);
 }
