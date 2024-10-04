@@ -11,17 +11,8 @@ pub struct Pallet<T: Config> {
     claims: BTreeMap<T::Content, T::AccountId>,
 }
 
+#[macros::call]
 impl<T: Config> Pallet<T> {
-    pub fn new() -> Self {
-        Self {
-            claims: BTreeMap::new(),
-        }
-    }
-
-    pub fn get_claim(&self, content: &T::Content) -> Option<&T::AccountId> {
-        self.claims.get(&content)
-    }
-
     pub fn create_claim(&mut self, caller: T::AccountId, claim: T::Content) -> DispatchResult {
         match self.get_claim(&claim) {
             Some(_) => Err("Claim already exists"),
@@ -42,24 +33,15 @@ impl<T: Config> Pallet<T> {
     }
 }
 
-pub enum Call<T: Config> {
-    CreateClaim { content: T::Content },
-    RevokeClaim { content: T::Content },
-}
-
-impl<T: Config> crate::support::Dispatch for Pallet<T> {
-    type Caller = T::AccountId;
-    type Call = Call<T>;
-
-    fn dispatch(&mut self, caller: Self::Caller, call: Self::Call) -> DispatchResult {
-        match call {
-            Call::CreateClaim { content } => {
-                self.create_claim(caller, content)
-            }
-            Call::RevokeClaim { content } => {
-                self.revoke_claim(caller, content)
-            }
+impl<T: Config> Pallet<T> {
+    pub fn new() -> Self {
+        Self {
+            claims: BTreeMap::new(),
         }
+    }
+
+    pub fn get_claim(&self, content: &T::Content) -> Option<&T::AccountId> {
+        self.claims.get(&content)
     }
 }
 
